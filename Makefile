@@ -14,23 +14,39 @@ IMAGE_TAG := 0.3.0
 
 OUT := $(shell pwd)/_out
 
-KUBEBUILDER_VERSION=2.3.2
+#KUBEBUILDER_VERSION=2.3.2
+#KUBEBUILDER_VERSION=3.10.0
+KUBE_VERSION=1.27.1
 
 $(shell mkdir -p "${OUT}")
 
+#test: _test/kubebuilder
+#	TEST_ASSET_ETCD=_test/kubebuilder/bin/etcd \
+#	TEST_ASSET_KUBE_APISERVER=_test/kubebuilder/bin/kube-apiserver \
+#	TEST_ASSET_KUBECTL=_test/kubebuilder/bin/kubectl \
+#	go test -v .
+
+#_test/kubebuilder:
+#	curl -fsSL https://github.com/kubernetes-sigs/kubebuilder/releases/download/v${KUBEBUILDER_VERSION}/kubebuilder_${KUBEBUILDER_VERSION}_${OS}_${ARCH}.tar.gz -o kubebuilder-tools.tar.gz
+#	mkdir -p _test/kubebuilder
+#	tar -xvf kubebuilder-tools.tar.gz
+#	mv kubebuilder_${KUBEBUILDER_VERSION}_${OS}_${ARCH}/bin _test/kubebuilder/
+#	rm kubebuilder-tools.tar.gz
+#	rm -R kubebuilder_${KUBEBUILDER_VERSION}_${OS}_${ARCH}
+
 test: _test/kubebuilder
-	TEST_ASSET_ETCD=_test/kubebuilder/bin/etcd \
-	TEST_ASSET_KUBE_APISERVER=_test/kubebuilder/bin/kube-apiserver \
-	TEST_ASSET_KUBECTL=_test/kubebuilder/bin/kubectl \
+	TEST_ASSET_ETCD=_test/kubebuilder/etcd \
+	TEST_ASSET_KUBE_APISERVER=_test/kubebuilder/kube-apiserver \
+	TEST_ASSET_KUBECTL=_test/kubebuilder/kubectl \
 	go test -v .
 
 _test/kubebuilder:
-	curl -fsSL https://github.com/kubernetes-sigs/kubebuilder/releases/download/v${KUBEBUILDER_VERSION}/kubebuilder_${KUBEBUILDER_VERSION}_${OS}_${ARCH}.tar.gz -o kubebuilder-tools.tar.gz
+	curl -fsSL https://go.kubebuilder.io/test-tools/$(KUBE_VERSION)/$(OS)/$(ARCH) -o kubebuilder-tools.tar.gz
 	mkdir -p _test/kubebuilder
 	tar -xvf kubebuilder-tools.tar.gz
-	mv kubebuilder_${KUBEBUILDER_VERSION}_${OS}_${ARCH}/bin _test/kubebuilder/
+	mv kubebuilder/bin/* _test/kubebuilder/
 	rm kubebuilder-tools.tar.gz
-	rm -R kubebuilder_${KUBEBUILDER_VERSION}_${OS}_${ARCH}
+	rm -R kubebuilder
 
 clean: clean-kubebuilder
 

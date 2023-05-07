@@ -1,11 +1,11 @@
-groupName: acme.bwolf.me
+groupName: acme.moto-timo.dev
 logLevel: 6
 certManager:
   namespace: cert-manager
   serviceAccountName: cert-manager
 image:
-  repository: bwolf/cert-manager-webhook-gandi
-  tag: 0.2.0
+  repository: mototimo/cert-manager-webhook-gandi
+  tag: 0.3.0
   pullPolicy: IfNotPresent
 nameOverride: ''
 fullnameOverride: ''
